@@ -8,7 +8,8 @@ module.exports = function(grunt) {
 			// define the files to lint
 			files: ['gruntfile.js',
 				'src/*.js',
-				'src/arduino/*.js', 
+				'src/arduino/*.js',
+				'src/rand/*.js', 
 				'src/leap/*.js',],
 			// configure JSHint (documented at http://www.jshint.com/docs/)
 			options: {

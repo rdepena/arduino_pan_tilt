@@ -1,4 +1,6 @@
-module.exports = {
+/*jslint indent: 4, maxerr: 50, vars: true, nomen: true*/
+/*global */
+var pointables_test = {
 	setUp: function (callback) {
 		this.pointables = require("../leap/pointables.js")();
 		//a valid frame.
@@ -51,3 +53,5 @@ module.exports = {
 		test.done();
 	},
 };
+
+module.exports = pointables_test;

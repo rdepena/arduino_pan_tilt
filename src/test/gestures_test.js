@@ -1,4 +1,6 @@
-module.exports = {
+/*jslint indent: 4, maxerr: 50, vars: true, nomen: true*/
+/*global */
+var gestures_test = {
 	setUp: function (callback) {
 		this.gestures = require("../leap/gestures.js")();
 		//a valid frame.
@@ -44,6 +46,6 @@ module.exports = {
 		test.ok(!processedFrame.isValid, "valid flag should be false");
 		test.done();
 	},
-
-
 };
+
+module.exports = gestures_test;
