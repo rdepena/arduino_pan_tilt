@@ -19,27 +19,34 @@ var randomMovement = function () {
 	};
 
 	var generateRandomFrame = function () {
-		currentPossition.x += getRandomArbitrary(0,10);
-		currentPossition.y = getRandomArbitrary(0,10);
-		currentPossition.z = getRandomArbitrary(0,10);
+		var x = getRandomArbitrary(0,10),
+			y = getRandomArbitrary(0,10),
+			z = getRandomArbitrary(0,10);
+		if (x % 2 === 0) {
+			currentPossition.x += x;
+			currentPossition.y += y;
+			currentPossition.z += z;
+		}
+		else {
+			currentPossition.x -= x;
+			currentPossition.y -= y;
+			currentPossition.z -= z;			
+		}
 
 		return currentPossition;
 	};
 
-	var randomFrame = function () {
-		for(var i = 0; i < subscribedFunctions.length; i++) {
-			subscribedFunctions[i](currentPossition);
-		}
-	};
 	var movementLoop = function () {
 		if(loopActive) {
-			randomFrame();
+			for(var i = 0; i < subscribedFunctions.length; i++) {
+				subscribedFunctions[i](generateRandomFrame());
+			}
 		}
 		setTimeout(movementLoop, 1000);
 	};
 
 	my.onFrame = function (callback) {
-		subscribedFunctions = callback;
+		subscribedFunctions.push(callback);
 	};
 
 	my.startRandomness = function () {
@@ -49,7 +56,8 @@ var randomMovement = function () {
 	my.stopRandomness = function () {
 		loopActive = false;
 	};
-
+	
+	return my;
 };
 
 module.exports = randomMovement;

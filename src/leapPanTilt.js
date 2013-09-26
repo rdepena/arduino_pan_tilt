@@ -25,10 +25,15 @@
 			processedFrame = null,
 			direction = null;
 
-		//react to the circle event.
-		gestures.on('circle', 2, function () {
-			toggleLaser(components.laser);
-		});
+		var twoFingerGesture = {
+			callback: function () {
+				toggleLaser(components.laser);
+			},
+			numberOfFingers: 2
+		};
+
+		//react to the two finger circle event.
+		gestures.on('circle', twoFingerGesture);
 
 		//react to each frame of the leap motion controller.
 		controller.on('frame', function (frame) {
@@ -41,11 +46,8 @@
 				if (processedFrame.isFrameValid) {
 					direction = processedFrame.pointDirection;
 					//we add 180 to compensate to the sevo center
-					components.servoX.move(direction.x + 120);
+					components.servoX.move(direction.x + 100);
 					components.servoY.move(direction.y);
-				}
-				else { 
-					console.log("frame not valid.");
 				}
 			}
 		});

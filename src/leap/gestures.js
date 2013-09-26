@@ -22,8 +22,9 @@ var gestures = function () {
 	var publishGesture = function (gesture, frame) {
 		if (gestureEvents[gesture.type]) {
 			for (var x = 0; x < gestureEvents[gesture.type].length; x++) {
+				console.log(gestureEvents[gesture.type][x]);
 				if(gestureEvents[gesture.type][x].numberOfFingers === frame.pointables.length) {
-					gestureEvents[gesture.type][x]();
+					gestureEvents[gesture.type][x].callback();
 					lastPublishedEventTime = Date.now();
 				} 
 			}
@@ -43,13 +44,11 @@ var gestures = function () {
 	};
 
 	//subscribe to events.
-	my.on = function (gesture, numberOfFingers, callback) {
+	my.on = function (gesture, options) {
 		if (!gestureEvents[gesture]) {
 			gestureEvents[gesture] = [];
 		}
-		//store the number of fingers involved in the gesture within the subscribed object.
-		callback.numberOfFingers = numberOfFingers;
-		gestureEvents[gesture].push(callback);
+		gestureEvents[gesture].push(options);
 	};
 
 	my.processFrame = function (frame) {
