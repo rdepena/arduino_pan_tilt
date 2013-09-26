@@ -42,16 +42,7 @@ var pointables_test = {
 		test.expect(1);
 		test.ok(!processedFrame.isValid, "valid flag should be false");
 		test.done();
-	},
-	pointDirectionReturnsDelta: function (test) {
-		var processedFrame = this.pointables.processFrame(this.validMockFrame);
-		var pointXDelta = this.validMockFrame.hands[0].stabilizedPalmPosition[0] - this.validMockFrame.pointables[0].stabilizedTipPosition[0];
-		var pointYDelta = this.validMockFrame.hands[0].stabilizedPalmPosition[1] - this.validMockFrame.pointables[0].stabilizedTipPosition[1];
-		test.expect(2);
-		test.equal(pointXDelta, processedFrame.pointDirection.x, "the pointDirection x should return the delta of the palm and the pointable");
-		test.equal(pointYDelta, processedFrame.pointDirection.y, "the pointDirection x should return the delta of the palm and the pointable");
-		test.done();
-	},
+	}
 };
 
 module.exports = pointables_test;

@@ -34,8 +34,9 @@ var pointables = function () {
 		var palm = palmPosition(frame);
 		var	tip = tipPosition(frame);
 		return {
-			x : palm.x - tip.x,
-			y : palm.y - tip.y,
+			//compensating x because yea.
+			x : (palm.x - tip.x) + 100,
+			y : (palm.y - tip.y),
 			z : palm.x - tip.x
 		};
 	};

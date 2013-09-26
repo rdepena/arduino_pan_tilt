@@ -22,7 +22,6 @@ var gestures = function () {
 	var publishGesture = function (gesture, frame) {
 		if (gestureEvents[gesture.type]) {
 			for (var x = 0; x < gestureEvents[gesture.type].length; x++) {
-				console.log(gestureEvents[gesture.type][x]);
 				if(gestureEvents[gesture.type][x].numberOfFingers === frame.pointables.length) {
 					gestureEvents[gesture.type][x].callback();
 					lastPublishedEventTime = Date.now();
