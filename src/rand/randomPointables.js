@@ -7,7 +7,7 @@ var randomPointables = function () {
 
 	var bounds = {
 		top: 180, 
-		low: 100
+		bottom: 100
 	};
 
 	var getRandomArbitrary = function (min, max) {
@@ -15,7 +15,7 @@ var randomPointables = function () {
 	};
 
 	my.generateRandomFrame = function (currentPossition) {
-		currentPossition.x = getRandomArbitrary(bounds.low, bounds.top);
+		currentPossition.x = getRandomArbitrary(bounds.bottom, bounds.top);
 
 		return {
 			isFrameValid : true,

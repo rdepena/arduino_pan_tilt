@@ -3,27 +3,75 @@
 (function () {
 	"use strict";
 	var Leap = require("leapjs"),
+		johnny = require("johnny-five"),
 		controller = new Leap.Controller({enableGestures: true}	),
 		gestures = require("./leap/gestures.js")(),
-		components = require("./arduino/components.js")(),
-		randomPointables = require("./rand/randomPointables.js")(),
-		isLaserOn = false,
-		isRandomMode = false;
+		components = require("./arduino/components.js")(johnny),
+		frameRecorder = require("./record/frameRecorder.js")(),
+		frameModes = {
+			recording: 'recording',
+			playback: 'playback',
+			leapMotion: 'leapMotion'
+		},
+		frameMode = frameModes.leapMotion,
+		recordStartTime = null;
 
-	//we want to be able to toggle the laser.
-	var toggleLaser = function (laser) {
-		if(isLaserOn) {
-			laser.off();
-		} else {
-			laser.on();
+	//internal functions.
+	var startRecording = function () {
+		components.redLed.on();
+		components.blueLed.on();
+		setTimeout(function () {
+			components.blueLed.off();
+			frameMode = frameModes.recording;	
+			recordStartTime = Date.now();
+		}, 1000);
+	};
+
+	var recordFrame = function (frame) {
+		frameRecorder.recordFrame(frame);
+		if(Date.now() - recordStartTime > 5000) {
+			startPlayback();
 		}
-		isLaserOn = !isLaserOn;
 	};
 
-	var toggleRandomMode = function () {
-		isRandomMode = !isRandomMode;
+	var startPlayback = function () {
+		frameMode = frameModes.playback;
+		components.blueLed.on();
+		components.redLed.off();
 	};
 
+	var endPlayback = function () {
+		frameMode = frameModes.leapMotion;
+		frameRecorder.wipeBuffer();
+		components.blueLed.off();
+	};
+
+	//declare gestures used:
+	var threeFingerCircle = {
+		callback: function () {
+			components.toggleLaser(components.laser);
+		},
+		numberOfFingers: 3
+	};
+
+	var fourFingerCircle = {
+		callback: function () {
+			startRecording();
+		},
+		numberOfFingers: 4
+	};
+
+	var fiveFingerSwipe = {
+		callback: function () {
+			endPlayback();
+		},
+		numberOfFingers: 5
+	};
+
+	//react to the two finger circle event.
+	gestures.on('circle', threeFingerCircle);
+	gestures.on('circle', fourFingerCircle);
+	gestures.on('swipe', fiveFingerSwipe);
 
 	//when the board is ready we will listen to the leapmotion controller:
 	components.board.on("ready", function () {
@@ -32,56 +80,25 @@
 			processedFrame = null,
 			direction = null;
 
-		var previousPosition = {
-			x : 60,
-			y : 60,
-			z : 60
-		};
-
-		//declare gestures used:
-		var twoFingerCircle = {
-			callback: function () {
-				toggleLaser(components.laser);
-			},
-			numberOfFingers: 2
-		};
-		var fourFingerCircle = {
-			callback: function () {
-				toggleRandomMode();
-			},
-			numberOfFingers: 4
-
-		};
-		var fiveFingerSwipe = {
-			callback: function () {
-				isRandomMode = false;
-			},
-			numberOfFingers: 5
-		};
-
-		//react to the two finger circle event.
-		gestures.on('circle', twoFingerCircle);
-		gestures.on('circle', fourFingerCircle);
-		gestures.on('swipe', fiveFingerSwipe);
-
 		//react to each frame of the leap motion controller.
 		controller.on('frame', function (frame) {
 			i += 1;
-			var frameMod = isRandomMode ? 60 : 4;
 			//we only want to capture i % x frames per second.
-			if (i % frameMod === 0) {
+			if (i % 4 === 0) {
 				//each frame needs processing for gestures.
 				processedFrame = gestures.processFrame(frame);
 
 				//we only want to react to valid frames.
-				if (isRandomMode || processedFrame.isFrameValid) {
-					direction = isRandomMode ? 
-						randomPointables.generateRandomFrame(previousPosition).pointDirection 
-						:  processedFrame.pointDirection;
+				if (frameMode === frameModes.playback || processedFrame.isFrameValid) {
+					direction = frameMode === frameModes.playback  ? frameRecorder.nextFrame() :
+						processedFrame.pointDirection;
 
 					components.servoX.move(direction.x);
 					components.servoY.move(direction.y);
-					previousPosition = direction;
+
+					if (frameMode === frameModes.recording) {
+						recordFrame(direction);
+					}
 				}
 			}
 		});

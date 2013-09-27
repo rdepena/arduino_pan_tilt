@@ -1,31 +1,40 @@
 /*jslint indent: 4, maxerr: 50, vars: true, nomen: true*/
 /*global */
-var components = function () {
+var components = function (johnnyFive) {
 	"use strict";
-
+	
 	var my = {};
-	//TODO:resolve this via injection.
-	var five = require("johnny-five");
-
-	my.board = five.Board({
+	
+	var isLaserOn = false;
+	my.board = johnnyFive.Board({
 		debug : true
 	});
 
-	my.servoX = null;
-	my.servoY = null;
-	my.laser =  null;
-
 	//we set up the components once the board is ready.
 	my.board.on("ready", function () {
-		my.servoX = new five.Servo({
+		my.servoX = new johnnyFive.Servo({
 			pin : 9
 		});
-		my.servoY =	new five.Servo({
+		my.servoY =	new johnnyFive.Servo({
 			pin : 10
 		});
 
-		my.laser = five.Led(7);
+		my.laser = johnnyFive.Led(7);
+
+		my.redLed = johnnyFive.Led(4);
+
+		my.blueLed = johnnyFive.Led(3);
 	});
+
+	//we want to be able to toggle the laser.
+	my.toggleLaser = function (laser) {
+		if(isLaserOn) {
+			laser.off();
+		} else {
+			laser.on();
+		}
+		isLaserOn = !isLaserOn;
+	};
 
 	return my;
 
