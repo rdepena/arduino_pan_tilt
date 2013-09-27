@@ -11,9 +11,9 @@
 		frameModes = {
 			recording: 'recording',
 			playback: 'playback',
-			leapMotion: 'leapMotion'
+			live: 'live'
 		},
-		frameMode = frameModes.leapMotion,
+		frameMode = frameModes.live,
 		recordStartTime = null;
 
 	//internal functions.
@@ -41,7 +41,7 @@
 	};
 
 	var endPlayback = function () {
-		frameMode = frameModes.leapMotion;
+		frameMode = frameModes.live;
 		frameRecorder.wipeBuffer();
 		components.blueLed.off();
 	};
