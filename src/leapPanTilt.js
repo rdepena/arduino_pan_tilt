@@ -20,6 +20,8 @@
 	var startRecording = function () {
 		components.redLed.on();
 		components.blueLed.on();
+
+		//want to give the user a second before we start recording.
 		setTimeout(function () {
 			components.blueLed.off();
 			frameMode = frameModes.recording;	
