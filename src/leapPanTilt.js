@@ -18,6 +18,8 @@
 
 	//internal functions.
 	var startRecording = function () {
+		//amount of time to wait before actually starting to record.
+		var waitBeforeRecordMilliseconds = 1000;
 		components.redLed.on();
 		components.blueLed.on();
 
@@ -26,51 +28,54 @@
 			components.blueLed.off();
 			frameMode = frameModes.recording;	
 			recordStartTime = Date.now();
-		}, 1000);
+		}, waitBeforeRecordMilliseconds);
 	};
 
+	//records a given frame.
 	var recordFrame = function (frame) {
+		//amount of milliseconds to record.
+		var recordMilliSeconds = 5000;
 		frameRecorder.recordFrame(frame);
-		if(Date.now() - recordStartTime > 5000) {
+
+		//check if we have recorded the correct amount of time
+		if(Date.now() - recordStartTime > recordMilliSeconds) {
+			//recorded enough start the playback
 			startPlayback();
 		}
 	};
 
+	//starts the playback of a recorded session.
 	var startPlayback = function () {
 		frameMode = frameModes.playback;
 		components.blueLed.on();
 		components.redLed.off();
 	};
 
+	//ends playback and returns the board to live mode.
 	var endPlayback = function () {
 		frameMode = frameModes.live;
 		frameRecorder.wipeBuffer();
 		components.blueLed.off();
 	};
 
-	//declare gestures used:
+	//describing a circle with three exposed finger the laser will be toggled.
 	var threeFingerCircle = {
-		callback: function () {
-			components.toggleLaser(components.laser);
-		},
+		callback: components.toggleLaser,
 		numberOfFingers: 3
 	};
 
+	//describing a circle with four exposed finger you will begin recording
 	var fourFingerCircle = {
-		callback: function () {
-			startRecording();
-		},
+		callback: startRecording,
 		numberOfFingers: 4
 	};
-
+	//a five finger swipe will end playback and return the board to live mode
 	var fiveFingerSwipe = {
-		callback: function () {
-			endPlayback();
-		},
+		callback: endPlayback,
 		numberOfFingers: 5
 	};
 
-	//react to the two finger circle event.
+	//subscibe all the events
 	gestures.on('circle', threeFingerCircle);
 	gestures.on('circle', fourFingerCircle);
 	gestures.on('swipe', fiveFingerSwipe);
@@ -95,9 +100,11 @@
 					direction = frameMode === frameModes.playback  ? frameRecorder.nextFrame() :
 						processedFrame.pointDirection;
 
+					//move the servos 
 					components.servoX.move(direction.x);
 					components.servoY.move(direction.y);
 
+					//record the frame if in recording mode.
 					if (frameMode === frameModes.recording) {
 						recordFrame(direction);
 					}

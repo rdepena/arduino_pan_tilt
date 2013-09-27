@@ -2,7 +2,7 @@
 /*global */
 var components = function (johnnyFive) {
 	"use strict";
-	
+
 	var my = {};
 	
 	var isLaserOn = false;
@@ -27,11 +27,11 @@ var components = function (johnnyFive) {
 	});
 
 	//we want to be able to toggle the laser.
-	my.toggleLaser = function (laser) {
+	my.toggleLaser = function () {
 		if(isLaserOn) {
-			laser.off();
+			my.laser.off();
 		} else {
-			laser.on();
+			my.laser.on();
 		}
 		isLaserOn = !isLaserOn;
 	};
