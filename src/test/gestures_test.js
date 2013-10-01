@@ -37,13 +37,13 @@ var gestures_test = {
 		var processedFrame = this.gestures.processFrame(this.validMockFrame);
 	    test.expect(1);
 	    //TODO: change isFrameValid to Valid.
-	    test.ok(processedFrame.isFrameValid, "valid flag should be true");
+	    test.ok(processedFrame.valid, "valid flag should be true");
 	    test.done();
 	},
 	invalidFrameReturnsFlag :function (test) {
 		var processedFrame = this.gestures.processFrame(this.invalidMockFrame);
 		test.expect(1);
-		test.ok(!processedFrame.isValid, "valid flag should be false");
+		test.ok(!processedFrame.valid, "valid flag should be false");
 		test.done();
 	},
 };

@@ -1,5 +1,6 @@
 /*jslint indent: 4, maxerr: 50, vars: true, nomen: true*/
 /*global */
+//process frame and return pointables.
 var pointables = function () {
 	"use strict";
 	var my = {};
@@ -14,6 +15,7 @@ var pointables = function () {
 		return false;
 	};
 
+	//expose leapmotion palm object as x,y,x
 	var palmPosition = function (frame) {
 		return {
 			x : frame.hands[0].stabilizedPalmPosition[0],
@@ -21,7 +23,7 @@ var pointables = function () {
 			z : frame.hands[0].stabilizedPalmPosition[2]
 		};
 	};
-
+	//expose leapmotion tip object as x,y,x
 	var tipPosition = function (frame) {
 		return {
 			x : frame.pointables[0].stabilizedTipPosition[0],
@@ -29,7 +31,7 @@ var pointables = function () {
 			z : frame.pointables[0].stabilizedTipPosition[2]
 		};
 	};
-
+	//calculate the delta of the palm and the pointable.
 	var pointDelta = function (frame) {
 		var palm = palmPosition(frame);
 		var	tip = tipPosition(frame);
@@ -41,12 +43,12 @@ var pointables = function () {
 		};
 	};
 
+	//process the frame for pointables.
 	my.processFrame = function (frame) {
-		var isValid = isFrameValid(frame);
+		var valid = isFrameValid(frame);
 		return {
-			isValid : isValid,
-			pointDirection : isValid ? pointDelta(frame) : null
-
+			valid : valid,
+			pointDirection : valid ? pointDelta(frame) : null
 		};
 	};
 

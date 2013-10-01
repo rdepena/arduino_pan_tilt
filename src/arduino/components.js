@@ -1,11 +1,15 @@
 /*jslint indent: 4, maxerr: 50, vars: true, nomen: true*/
 /*global */
+//create an interface to communicate with the arduino board.
 var components = function (johnnyFive) {
 	"use strict";
 
 	var my = {};
 	
+	//internal variables:
 	var isLaserOn = false;
+
+	//configure our board.
 	my.board = johnnyFive.Board({
 		debug : true
 	});
@@ -18,11 +22,9 @@ var components = function (johnnyFive) {
 		my.servoY =	new johnnyFive.Servo({
 			pin : 10
 		});
-
+		//digital outs.
 		my.laser = johnnyFive.Led(7);
-
 		my.redLed = johnnyFive.Led(4);
-
 		my.blueLed = johnnyFive.Led(3);
 	});
 

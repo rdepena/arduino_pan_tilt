@@ -96,7 +96,7 @@
 				processedFrame = gestures.processFrame(frame);
 
 				//we only want to react to valid frames.
-				if (frameMode === frameModes.playback || processedFrame.isFrameValid) {
+				if (frameMode === frameModes.playback || processedFrame.valid) {
 					direction = frameMode === frameModes.playback  ? frameRecorder.nextFrame() :
 						processedFrame.pointDirection;
 

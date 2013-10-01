@@ -1,8 +1,9 @@
 /*jslint indent: 4, maxerr: 50, vars: true, nomen: true*/
 /*global */
+//process frames and raise pointable events.
 var gestures = function () {
 	"use strict";
-
+	//we need will expose the pointables library and also use it to ensure that the number of fingers per gesture is correct.
 	var pointables = require('./pointables.js')();
 	var my = {};
 	var gestureEvents = [];
@@ -16,7 +17,6 @@ var gestures = function () {
 		}
 		return true;
 	};
-
 
 	//invoke the callbacks for a specified gesture.
 	var publishGesture = function (gesture, frame) {
@@ -50,12 +50,13 @@ var gestures = function () {
 		gestureEvents[gesture].push(options);
 	};
 
+	//processes a given frame for gestures.
 	my.processFrame = function (frame) {
 		processGestures(frame);
 		var pointable = pointables.processFrame(frame);
 		return {
 			//TODO: change isFrameValid to Valid.
-			isFrameValid : pointable.isValid,
+			valid : pointable.valid,
 			pointDirection : pointable.pointDirection  
 		};
 	};

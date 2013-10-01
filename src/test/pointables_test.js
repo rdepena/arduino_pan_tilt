@@ -34,13 +34,13 @@ var pointables_test = {
 	validFrameReturnsFlag: function (test) {
 		var processedFrame = this.pointables.processFrame(this.validMockFrame);
 	    test.expect(1);
-	    test.ok(processedFrame.isValid, "valid flag should be true");
+	    test.ok(processedFrame.valid, "valid flag should be true");
 	    test.done();
 	},
 	invalidFrameReturnsFlag :function (test) {
 		var processedFrame = this.pointables.processFrame(this.invalidMockFrame);
 		test.expect(1);
-		test.ok(!processedFrame.isValid, "valid flag should be false");
+		test.ok(!processedFrame.valid, "valid flag should be false");
 		test.done();
 	}
 };
