@@ -2,6 +2,11 @@
 /*global */
 (function () {
 	"use strict";
+
+	///------------
+	///dependencies
+	///------------
+
 	var Leap = require("leapjs"),
 		johnny = require("johnny-five"),
 		controller = new Leap.Controller({enableGestures: true}	),
@@ -13,22 +18,20 @@
 			playback: 'playback',
 			live: 'live'
 		},
-		frameMode = frameModes.live,
-		recordStartTime = null;
+		frameMode = frameModes.live;
 
-	//internal functions.
-	var startRecording = function () {
+	///------------------
+	///internal functions.
+	///------------------
+
+	var initiateRecording = function () {
 		//amount of time to wait before actually starting to record.
 		var waitBeforeRecordMilliseconds = 1000;
 		components.redLed.on();
 		components.blueLed.on();
 
 		//want to give the user a second before we start recording.
-		setTimeout(function () {
-			components.blueLed.off();
-			frameMode = frameModes.recording;	
-			recordStartTime = Date.now();
-		}, waitBeforeRecordMilliseconds);
+		setTimeout(startRecording,waitBeforeRecordMilliseconds);
 	};
 
 	//records a given frame.
@@ -37,11 +40,14 @@
 		var recordMilliSeconds = 5000;
 		frameRecorder.recordFrame(frame);
 
-		//check if we have recorded the correct amount of time
-		if(Date.now() - recordStartTime > recordMilliSeconds) {
-			//recorded enough start the playback
-			startPlayback();
-		}
+		//only start playback after the pre-set record time.
+		setTimeout(startPlayback, recordMilliSeconds);
+	};
+
+	//starts recording frames.
+	var startRecording = function () {
+		components.blueLed.off();
+		frameMode = frameModes.recording;		
 	};
 
 	//starts the playback of a recorded session.
@@ -58,6 +64,10 @@
 		components.blueLed.off();
 	};
 
+	///------------------------------
+	///describe gestures to subscribe to
+	///------------------------------
+
 	//describing a circle with three exposed finger the laser will be toggled.
 	var threeFingerCircle = {
 		callback: components.toggleLaser,
@@ -66,7 +76,7 @@
 
 	//describing a circle with four exposed finger you will begin recording
 	var fourFingerCircle = {
-		callback: startRecording,
+		callback: initiateRecording,
 		numberOfFingers: 4
 	};
 	//a five finger swipe will end playback and return the board to live mode
@@ -75,7 +85,7 @@
 		numberOfFingers: 5
 	};
 
-	//subscibe all the events
+	//subscibe all the gesture events.
 	gestures.on('circle', threeFingerCircle);
 	gestures.on('circle', fourFingerCircle);
 	gestures.on('swipe', fiveFingerSwipe);
