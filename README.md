@@ -7,5 +7,5 @@ built using johnny-five.
 
 Video of the thing working.
 
-https://www.dropbox.com/s/5x48wney3f8h1lq/2013-08-30%2020.48.27.mp4
+https://www.dropbox.com/s/97u8m2fw3b8z6af/2013-09-27%2017.25.32.mp4
 
