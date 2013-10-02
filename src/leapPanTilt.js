@@ -83,31 +83,25 @@
 	//when the board is ready we will listen to the leapmotion controller:
 	components.board.on("ready", function () {
 		//control the frames per second.
-		var i = 0,
-			processedFrame = null,
+		var processedFrame = null,
 			direction = null;
 
 		//react to each frame of the leap motion controller.
 		controller.on('frame', function (frame) {
-			i += 1;
-			//we only want to capture i % x frames per second.
-			if (i % 4 === 0) {
-				//each frame needs processing for gestures.
-				processedFrame = gestures.processFrame(frame);
+			//each frame needs processing for gestures.
+			processedFrame = gestures.processFrame(frame);
 
-				//we only want to react to valid frames.
-				if (frameMode === frameModes.playback || processedFrame.valid) {
-					direction = frameMode === frameModes.playback  ? frameRecorder.nextFrame() :
-						processedFrame.pointDirection;
+			//we only want to react to valid frames.
+			if (frameMode === frameModes.playback || processedFrame.valid) {
+				direction = frameMode === frameModes.playback  ? frameRecorder.nextFrame() : processedFrame.pointDirection;
+					
+				//move the servos 
+				components.servoX.move(direction.x);
+				components.servoY.move(direction.y);
 
-					//move the servos 
-					components.servoX.move(direction.x);
-					components.servoY.move(direction.y);
-
-					//record the frame if in recording mode.
-					if (frameMode === frameModes.recording) {
-						recordFrame(direction);
-					}
+				//record the frame if in recording mode.
+				if (frameMode === frameModes.recording) {
+					recordFrame(direction);
 				}
 			}
 		});
