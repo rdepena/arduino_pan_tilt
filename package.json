@@ -2,8 +2,8 @@
   "name": "arduino_pan_tilt",
   "version": "0.0.1",
   "dependencies": {
-    "grunt": ">=0.3.0", 
-    "grunt-cli" : ">=0.1.9",
+    "grunt": ">=0.3.0",
+    "grunt-cli": ">=0.1.9",
     "grunt-contrib-jshint": ">=0.6.0",
     "grunt-contrib-watch": ">=0.5.0",
     "johnny-five": ">=0.7.0",
@@ -13,5 +13,19 @@
   },
   "engines": {
     "node": ">=0.8.0"
-  }
+  },
+  "readmeFilename": "README.md",
+  "gitHead": "70df9f767e3ab6a4aa04debb0fbe3d36bb81751e",
+  "description": "arduino_pan_tilt ================",
+  "main": "gruntfile.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rdepena/arduino_pan_tilt.git"
+  },
+  "author": "",
+  "license": "BSD"
 }
