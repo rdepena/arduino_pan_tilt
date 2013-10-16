@@ -4,23 +4,24 @@
 	"use strict";
 
 	var johnny = require("johnny-five"),
-    	dualshock = require("./dualShock/dualshock.js")(),
+		dualShock3 = require('dualshock-controller'),
 		components = require("./arduino/components.js")(johnny);
 
-	var processFrame = function (frame) {
-		console.log(frame);
-		//compensate for servo possition. TODO: clean this up.
-		components.servoY.move(frame.leftY -125);
-		components.servoX.move(frame.leftX - 60);
-	};
-	var readLoop = function () {
-		dualshock.read(processFrame);
-		//getting errors with anything lower than 50.
-		setTimeout(readLoop, 50);
-	};
+	dualShock3.on('left:move', function(data) {
+			components.servoY.move(data.y -125);
+			components.servoX.move(data.x - 60);
+		});
+	dualShock3.on('error', function (error) {
+		console.log(error);
+	});
 
+	dualShock3.on('connect', function () {
+		console.log("connected");
+	})
+
+	//when jhonny is alive go.
 	components.board.on("ready", function () {
-		readLoop();
+		dualShock3.connect();
 	});
 	
 }());
