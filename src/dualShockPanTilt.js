@@ -9,7 +9,7 @@
 
 	dualShock3.on('left:move', function(data) {
 			components.servoY.move(data.y -125);
-			components.servoX.move(data.x - 60);
+			components.servoX.move(250 - data.x);
 		});
 	dualShock3.on('error', function (error) {
 		console.log(error);
@@ -17,7 +17,14 @@
 
 	dualShock3.on('connect', function () {
 		console.log("connected");
-	})
+	});
+
+	dualShock3.on('r2:pressed', function () {
+		components.laser.on();
+	});
+	dualShock3.on("r2:release", function (){
+		components.laser.off();
+	});
 
 	//when jhonny is alive go.
 	components.board.on("ready", function () {
