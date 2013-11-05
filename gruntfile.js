@@ -1,17 +1,17 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
 		watch: {
-			files: ['src/**'],
+			files: ['lib/**'],
 			tasks: ['jshint', 'nodeunit']
 		},
 		jshint: {
 			// define the files to lint
 			files: ['gruntfile.js',
-				'src/*.js',
-				'src/arduino/*.js',
-				'src/rand/*.js',
-				'src/record/*.js',
-				'src/leap/*.js',],
+				'lib/*.js',
+				'lib/arduino/*.js',
+				'lib/rand/*.js',
+				'lib/record/*.js',
+				'lib/leap/*.js',],
 			// configure JSHint (documented at http://www.jshint.com/docs/)
 			options: {
 				// more options here if you want to override JSHint defaults
@@ -22,7 +22,7 @@ module.exports = function(grunt) {
 			}
 		},
 		nodeunit: {
-			all: ['src/test/*.js']
+			all: ['lib/test/*.js']
 		}
 	});
 
