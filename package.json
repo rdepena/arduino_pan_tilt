@@ -10,7 +10,8 @@
     "leapjs": "^0.2.0",
     "nodeunit": ">=0.8.0",
     "grunt-contrib-nodeunit": ">=0.2.0",
-    "dualshock-controller": ">=0.0.3"
+    "dualshock-controller": ">=0.0.3",
+    "grunt-jsbeautifier": "^0.2.7"
   },
   "engines": {
     "node": ">=0.8.0"
